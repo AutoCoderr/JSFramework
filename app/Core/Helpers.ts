@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import fs from "fs-extra";
 
 export default class Helpers {
     constructor() {
@@ -35,4 +34,8 @@ export default class Helpers {
     }
 
     static ucFirst = str => str.charAt(0).toUpperCase()+str.slice(1);
+
+    static serializeEntityArray(entities: Array<any>) {
+        return Promise.all(entities.map(exemplaire => exemplaire.serialize()));
+    }
 };

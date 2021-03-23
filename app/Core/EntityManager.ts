@@ -1,4 +1,5 @@
 import {Model} from "sequelize";
+import Helpers from "./Helpers";
 
 export default class EntityManager {
     ModelInstance: null|typeof Model = null;
@@ -25,15 +26,14 @@ export default class EntityManager {
 
 
     async save() {
-        const entryObject: any = this.serialize();
-        delete entryObject.id;
+        const entryObject: any = await this.serialize(false);
 
         if (this.id == null) {
             let entry;
             try {// @ts-ignore
                 entry = await this.ModelInstance.create(entryObject);
             } catch(e) {
-                return false;
+                throw e;
             }
             this.id = entry.dataValues.id;
             return this;
@@ -42,7 +42,7 @@ export default class EntityManager {
             try {// @ts-ignore
                 entry = await this.ModelInstance.findOne({where: {id: this.id}});
             } catch(e) {
-                return false;
+                throw e;
             }
             for (let attr in entryObject) {
                 entry[attr] = this[attr];
@@ -65,12 +65,35 @@ export default class EntityManager {
         return true;
     }
 
-    serialize() {
-        let entryObject: Object = {};
+    async serialize(takeIdAndOneToMany = true) {
+        let entryObject: any = {};
         for (let attr in this) {
-            if (typeof(this[attr]) != "function" && attr != "modelInstance") {
-                // @ts-ignore
-                entryObject[attr] = this[attr];
+            if (typeof(this[attr]) != "function" && attr != "modelInstance" && (takeIdAndOneToMany || (!takeIdAndOneToMany && attr != "id"))) {
+                let elem;
+                if (typeof(this["get"+Helpers.ucFirst(attr)]) == "function") {
+                    elem = await this["get"+Helpers.ucFirst(attr)]();
+                } else {
+                    elem = this[attr];
+                }
+
+                if (elem instanceof Array && takeIdAndOneToMany) {
+                    entryObject[attr] = [];
+                    for (let subElem of elem) {
+                        if (subElem instanceof EntityManager) {
+                            entryObject[attr].push(await subElem.serialize());
+                        } else if (typeof(subElem.dataValues) != "undefined") {
+                            entryObject[attr].push(await subElem.dataValues);
+                        }
+                    }
+                } else if(!(elem instanceof Array)) {
+                    if (elem instanceof EntityManager) {
+                        entryObject[attr] = await elem.serialize();
+                    } else if (typeof(elem) == "object" && elem != null && typeof(elem.dataValues) != "undefined") {
+                        entryObject[attr] = elem.dataValues;
+                    } else {
+                        entryObject[attr] = elem;
+                    }
+                }
             }
         }
         return entryObject;

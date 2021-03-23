@@ -1,10 +1,14 @@
+import {TestController} from "./Controllers/TestController";
+
+const {twig} = require("twig");
 const express = require("express");
 
 const app = express();
 
-app.get("/", (req: any, res: any) => {
-   res.send("COUCOU");
-});
+app.set('views', 'Views');
+app.set('view engine', 'twig')
+
+app.use('/test',TestController);
 
 app.listen(80);
 

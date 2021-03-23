@@ -13,9 +13,10 @@
   "dependencies": {
     "express": "^4.17.1",
     "fs-extra": "^9.0.1",
-    "sequelize": "^6.3.5",
     "pg": "^8.5.1",
-    "pg-hstore": "^2.3.3"
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5",
+    "twig": "^1.15.4"
   },
   "devDependencies": {
     "typescript": "^4.0.5"

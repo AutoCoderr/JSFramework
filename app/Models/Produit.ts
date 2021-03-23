@@ -30,7 +30,7 @@ Produit.init(
         },
         description: {
             type: DataTypes.STRING(255),
-            allowNull: false
+            allowNull: true
         },
         units: {
             type: DataTypes.INTEGER,
