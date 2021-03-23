@@ -1,15 +1,21 @@
-import {TestController} from "./Controllers/TestController";
+import Router from "./Core/Router";
+import Helpers from "./Core/Helpers";
 
-const {twig} = require("twig");
+const Twig = require("twig");
+const {twig} = Twig;
 const express = require("express");
 
 const app = express();
 
-app.set('views', 'Views');
-app.set('view engine', 'twig')
+Twig.extendFunction('path', function (pathName, params = {}) {
+    return Helpers.getPath(pathName, params);
+})
 
-app.use('/test',TestController);
+app.set('views', 'Views');
+app.set('view engine', 'twig');
 
 app.listen(80);
+
+Router(app);
 
 console.log("Server started");

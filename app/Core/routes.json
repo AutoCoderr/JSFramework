@@ -1,0 +1,23 @@
+{
+  "TestController":{
+    "prefix": "test_",
+    "prefix_route": "/test",
+
+    "routes": {
+
+      "exemplaires": {
+        "controller": "Test",
+        "action": "getExemplaires",
+        "route": "/exemplaires",
+        "methods": ["GET"]
+      },
+
+      "coucou": {
+        "controller": "Test",
+        "action": "coucou",
+        "route": "/coucou/:prenom"
+      }
+
+    }
+  }
+}

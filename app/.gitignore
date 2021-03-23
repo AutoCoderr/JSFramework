@@ -1,6 +1,7 @@
 package-lock.json
 /*.js
 /Repositories/*.js
+/Controllers/*.js
 /Models/*.js
 /Entities/*.js
 /Core/*.js
