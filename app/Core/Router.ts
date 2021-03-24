@@ -10,17 +10,25 @@ export default function Router(app) {
             const controller = new C();
 
             const controllerConfig = controllers[controllerName];
+            let prefix_route = "";
+            if (typeof(controllerConfig.prefix_route) != "undefined") {
+                prefix_route = controllerConfig.prefix_route;
+            }
 
             for (const routeName in controllerConfig.routes) {
                 const config = controllerConfig.routes[routeName];
-
+                let action = routeName;
                 if (typeof(controller[config.action]) != "undefined") {
+                    action = config.action;
+                }
+
+                if (typeof(controller[action]) != "undefined") {
                     let methods = ["get"];
                     if (config.methods != undefined) {
                         methods = config.methods.map(method => method.toLowerCase());
                     }
                     for (const method of methods) {
-                        app[method](controllerConfig.prefix_route+config.route , controller[config.action]);
+                        app[method](prefix_route+config.route , controller[action]);
                     }
                 } else {
                     console.log("the '"+controllerConfig.prefix+routeName+"' route in not correctly configured");

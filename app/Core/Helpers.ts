@@ -50,7 +50,16 @@ export default class Helpers {
 
         for (const controllerName in controllers) {
             const controllerSettings = controllers[controllerName];
-            const {prefix, routes, prefix_route} = controllerSettings;
+            const {routes} = controllerSettings;
+            let prefix = "";
+            if (typeof(controllerSettings.prefix) != "undefined") {
+                prefix = controllerSettings.prefix;
+            }
+
+            let prefix_route = "";
+            if (typeof(controllerSettings.prefix_route) != "undefined") {
+                prefix_route = controllerSettings.prefix_route;
+            }
 
             if (pathName.length >= prefix.length && pathName.substring(0,prefix.length) == prefix &&
                 routes[pathName.substring(prefix.length)] != undefined) {
@@ -63,7 +72,7 @@ export default class Helpers {
                 return route;
             }
         }
-
+        console.log("Nothing route found for "+pathName);
         return "#nothing";
     }
 };

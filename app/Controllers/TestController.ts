@@ -55,6 +55,10 @@ export default class TestController extends Controller{
         const prenom = req.params.prenom
         this.render(res,"test/coucou.html.twig", {prenom});
     }
+
+    register = async (req: any, res: any) => {
+        res.send("coucou");
+    }
 }
 
 function rand(a,b) {

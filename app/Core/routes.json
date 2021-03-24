@@ -6,16 +6,17 @@
     "routes": {
 
       "exemplaires": {
-        "controller": "Test",
         "action": "getExemplaires",
         "route": "/exemplaires",
         "methods": ["GET"]
       },
 
       "coucou": {
-        "controller": "Test",
-        "action": "coucou",
         "route": "/coucou/:prenom"
+      },
+
+      "register": {
+        "route": "/register"
       }
 
     }
