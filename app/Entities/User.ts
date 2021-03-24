@@ -10,7 +10,7 @@ export default class User extends EntityManager {
     email: null|string = null;
     firstname: null|string = null;
     lastname: null|string = null;
-    permission: null|string = null;
+    roles: null|string = null;
     password: null|string = null;
 
     Exemplaires: null|Array<Exemplaire> = null;
@@ -36,14 +36,28 @@ export default class User extends EntityManager {
         return this.lastname;
     }
 
-    setPermission(permission: string = "user") {
-        if (permission !== "user" && permission !== "seller" && permission !== "admin") {
-            permission = "user";
+    addRole(role: string) {
+        if (this.roles == null) {
+            this.roles = "[]";
         }
-        this.permission = permission;
+        if (!JSON.parse(this.roles).includes(role)) {
+            this.roles = JSON.stringify([...JSON.parse(this.roles), role])
+        }
     }
-    getPermission() {
-        return this.permission;
+    setRoles(roles: Array<string>) {
+        this.roles = JSON.stringify(roles);
+    }
+    removeRole(role: string) {
+        if (this.roles != null) {
+            const roles = JSON.parse(this.roles);
+            if (roles.includes(role)) {
+                roles.splice(roles.indexOf(role),1);
+            }
+            this.roles = JSON.stringify(roles);
+        }
+    }
+    getRoles() {
+        return this.roles == null ? null : JSON.parse(this.roles);
     }
 
     setPassword(password: string) {

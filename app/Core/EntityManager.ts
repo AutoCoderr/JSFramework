@@ -26,7 +26,7 @@ export default class EntityManager {
 
 
     async save() {
-        const entryObject: any = await this.serialize(false);
+        const entryObject: any = await this.serialize(true);
 
         if (this.id == null) {
             let entry;
@@ -65,18 +65,18 @@ export default class EntityManager {
         return true;
     }
 
-    async serialize(takeIdAndOneToMany = true) {
+    async serialize(forSaving = false) {
         let entryObject: any = {};
         for (let attr in this) {
-            if (typeof(this[attr]) != "function" && attr != "modelInstance" && (takeIdAndOneToMany || (!takeIdAndOneToMany && attr != "id"))) {
+            if (typeof(this[attr]) != "function" && attr != "modelInstance" && (!forSaving || (forSaving && attr != "id"))) {
                 let elem;
-                if (typeof(this["get"+Helpers.ucFirst(attr)]) == "function") {
+                if (typeof(this["get"+Helpers.ucFirst(attr)]) == "function" && (!forSaving || (forSaving  && attr != "roles"))) {
                     elem = await this["get"+Helpers.ucFirst(attr)]();
                 } else {
                     elem = this[attr];
                 }
 
-                if (elem instanceof Array && takeIdAndOneToMany) {
+                if (elem instanceof Array && !forSaving && attr != "roles") {
                     entryObject[attr] = [];
                     for (let subElem of elem) {
                         if (subElem instanceof EntityManager) {
@@ -85,7 +85,7 @@ export default class EntityManager {
                             entryObject[attr].push(await subElem.dataValues);
                         }
                     }
-                } else if(!(elem instanceof Array)) {
+                } else if(!(elem instanceof Array) || attr == "roles") {
                     if (elem instanceof EntityManager) {
                         entryObject[attr] = await elem.serialize();
                     } else if (typeof(elem) == "object" && elem != null && typeof(elem.dataValues) != "undefined") {

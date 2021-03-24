@@ -7,7 +7,7 @@ export default function Router(app) {
         const controllerPath = __dirname+"/../Controllers/"+controllerName+".js";
         if (fs.existsSync(controllerPath) && !fs.statSync(controllerPath).isDirectory()) {
             const C = require(controllerPath).default;
-            const controller = new C();
+            const controller = new C(null,null);
 
             const controllerConfig = controllers[controllerName];
             let prefix_route = "";
@@ -28,7 +28,10 @@ export default function Router(app) {
                         methods = config.methods.map(method => method.toLowerCase());
                     }
                     for (const method of methods) {
-                        app[method](prefix_route+config.route , controller[action]);
+                        app[method](prefix_route+config.route , (req,res) => {
+                            const controller = new C(req,res);
+                            controller[action]()
+                        });
                     }
                 } else {
                     console.log("the '"+controllerConfig.prefix+routeName+"' route in not correctly configured");

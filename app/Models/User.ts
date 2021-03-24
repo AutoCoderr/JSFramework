@@ -7,7 +7,7 @@ export interface IUser {
     email: string;
     firstname: string;
     lastname: string;
-    permission: string;
+    roles: string;
     password: string;
 }
 
@@ -15,7 +15,7 @@ export default class User extends Model {
     public id!: number;
     public firstname!: string;
     public lastname!: string;
-    public permission!: string;
+    public roles!: string;
     public password!: string;
 }
 
@@ -39,9 +39,9 @@ User.init(
             type: DataTypes.STRING(50),
             allowNull: false
         },
-        permission: {
-            type: DataTypes.ENUM("admin", "seller", "user"),
-            defaultValue: "user"
+        roles: {
+            type: DataTypes.STRING(50),
+            defaultValue: "[\"USER\"]"
         },
         password: {
             type: DataTypes.STRING(40),

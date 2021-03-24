@@ -16,7 +16,17 @@
       },
 
       "register": {
-        "route": "/register"
+        "route": "/register",
+        "methods": ["GET","POST"]
+      },
+
+      "login": {
+        "route": "/login",
+        "methods": ["GET","POST"]
+      },
+
+      "logout": {
+        "route": "/logout"
       }
 
     }

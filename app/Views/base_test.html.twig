@@ -12,7 +12,13 @@
                 <ul>
                     <li><a href="{{ path('test_coucou', {'prenom': 'toto'}) }}">Coucou</a></li>
                     <li><a href="{{ path('test_exemplaires') }}">Exemplaires</a></li>
-                    <li><a href="{{ path('test_register') }}">Inscription</a></li>
+                    {% if session.user is defined %}
+                        <li><a href="{{ path('test_logout') }}">Se déconnecter</a></li>
+                        <li>{{ session.user.firstname }} {{ session.user.lastname }}</li>
+                    {% else %}
+                        <li><a href="{{ path('test_register') }}">Inscription</a></li>
+                        <li><a href="{{ path('test_login') }}">Connexion</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </header>

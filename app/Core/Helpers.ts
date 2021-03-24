@@ -5,18 +5,11 @@ export default class Helpers {
     constructor() {
     }
 
-    static getData(method,args) {
-        if (method === "GET") {
-            return args.GET;
-        }
-        if (method === "POST") {
-            let datas = [];
-            for (let key in args.POST) {
-                if (args.POST[key].type === "text") {
-                    datas[key] = args.POST[key].content;
-                }
-            }
-            return datas;
+    static getDatas(req) {
+        if (req.method === "GET") {
+            return {...req.query};
+        } else if (req.method == "POST") {
+            return {...req.body};
         }
         return {};
     }
@@ -45,7 +38,7 @@ export default class Helpers {
                 return params[match];
             }
             console.log("url '"+content+"' has a parameter ':"+match+"' which is not setted");
-            return "nothing"
+            return match;
         };
 
         for (const controllerName in controllers) {
@@ -74,5 +67,15 @@ export default class Helpers {
         }
         console.log("Nothing route found for "+pathName);
         return "#nothing";
+    }
+
+    static destroySessionForm(actionName,session) {
+        if (typeof(session.errors) != "undefined") {
+            delete session.errors[actionName];
+        }
+        if (typeof(session.datas) != "undefined") {
+            delete session.datas[actionName];
+        }
+        return "";
     }
 };
