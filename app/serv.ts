@@ -20,7 +20,7 @@ app.use(session({
     secret: 'pVkEmEums7PD7kCuhkqF',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 }
+    cookie: { maxAge: 60*60*1000 }
 }));
 
 app.set('views', 'Views');

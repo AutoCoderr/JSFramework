@@ -30,7 +30,7 @@ export default class Helpers {
     static ucFirst = str => str.charAt(0).toUpperCase()+str.slice(1);
 
     static getPath(pathName, params = {}) {
-        const controllers = JSON.parse(fs.readFileSync(__dirname+"/routes.json"));
+        const controllers = JSON.parse(fs.readFileSync(__dirname+"/../config/routes.json"));
         const regexReplacer = new RegExp(":[a-zA-Z0-9_]+");
         const replacer = (match,index,content) => {
             match = match.slice(1);

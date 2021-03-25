@@ -11,15 +11,6 @@ import UserRepository from "../Repositories/UserRepository";
 export default class TestController extends Controller {
 
     getExemplaires = async () => {
-        let user = new User();
-        user.setEmail("julienbouvet78@hotmail.com")
-        user.setFirstname("Julien");
-        user.setLastname("BOUVET");
-        user.setPassword("1234");
-        user.setRoles(['USER']);
-
-        await user.save();
-
         let produits: Array<{name: string, entity: any}> = [
             {name: "Rubik's cube", entity: null},
             {name: "PC gamer", entity: null},
@@ -36,7 +27,7 @@ export default class TestController extends Controller {
             console.log(produit.entity);
         }
 
-
+        let user = await this.getUser();
         for (let produit of produits) {
             let exemplaire = new Exemplaire();
             exemplaire.setProduit(produit.entity);

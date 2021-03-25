@@ -5,5 +5,6 @@ package-lock.json
 /Models/*.js
 /Entities/*.js
 /Core/*.js
+/Forms/*.js
 !/Core/env.js
 /node_modules

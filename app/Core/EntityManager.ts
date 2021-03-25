@@ -70,7 +70,7 @@ export default class EntityManager {
         for (let attr in this) {
             if (typeof(this[attr]) != "function" && attr != "modelInstance" && (!forSaving || (forSaving && attr != "id"))) {
                 let elem;
-                if (typeof(this["get"+Helpers.ucFirst(attr)]) == "function" && (!forSaving || (forSaving  && attr != "roles"))) {
+                if (typeof(this["get"+Helpers.ucFirst(attr)]) == "function" && !forSaving) {
                     elem = await this["get"+Helpers.ucFirst(attr)]();
                 } else {
                     elem = this[attr];

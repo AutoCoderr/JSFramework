@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 
 export default function Router(app) {
-    const controllers = JSON.parse(fs.readFileSync(__dirname+"/routes.json"));
+    const controllers = JSON.parse(fs.readFileSync(__dirname+"/../config/routes.json"));
 
     for (const controllerName in controllers) {
         const controllerPath = __dirname+"/../Controllers/"+controllerName+".js";
@@ -30,7 +30,9 @@ export default function Router(app) {
                     for (const method of methods) {
                         app[method](prefix_route+config.route , (req,res) => {
                             const controller = new C(req,res);
-                            controller[action]()
+                            if (controller.canAccess()) {
+                                controller[action]();
+                            }
                         });
                     }
                 } else {
