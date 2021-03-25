@@ -22,6 +22,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: 60*60*1000 }
 }));
+app.use(express.static('public'));
 
 app.set('views', 'Views');
 app.set('view engine', 'twig');
