@@ -33,5 +33,5 @@ Club.init(
     }
 );
 
-Club.belongsToMany(User, { through: "Club_Users" });
-User.belongsToMany(Club, { through: "Club_Users" });
+Club.belongsToMany(User, { through: DB_PREFIX+"Club_Users" });
+User.belongsToMany(Club, { through: DB_PREFIX+"Club_Users" });
