@@ -6,6 +6,10 @@
         "path": "^/test/exemplaires",
         "methods": "GET",
         "roles": "connected"
+      },
+      {
+        "path": "^/test/clubs",
+        "roles": "connected"
       }
     ]
 }

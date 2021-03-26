@@ -1,0 +1,10 @@
+{% extends 'base_test.html.twig' %}
+
+{% block body %}
+<h1>Les clubs :</h1>
+<ul>
+    {% for club in clubs %}
+        <li>{{ club.name }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

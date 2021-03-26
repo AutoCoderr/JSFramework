@@ -5,7 +5,7 @@ import ExemplaireModel from "../Models/Exemplaire";
 
 export default class Exemplaire extends EntityManager {
 
-	ModelInstance = ExemplaireModel;
+	Model = ExemplaireModel;
 
 	units: null|number = null;
 	User: null|User = null;
@@ -42,15 +42,4 @@ export default class Exemplaire extends EntityManager {
 		}
 		return this.Produit;
 	}
-}
-
-User.prototype.getExemplaires = Produit.prototype.getExemplaires = function(): null|Array<Exemplaire> {
-	if (this.Exemplaires instanceof Array) {
-		for (let i=0;i<this.Exemplaires.length;i++) {
-			if (!(this.Exemplaires[i] instanceof Exemplaire)) {
-				this.Exemplaires[i] = (new Exemplaire()).hydrate(this.Exemplaires[i]);
-			}
-		}
-	}
-	return this.Exemplaires;
 }

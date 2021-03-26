@@ -4,7 +4,7 @@ import ProduitModel from "../Models/Produit";
 
 export default class Produit extends EntityManager {
 
-    ModelInstance = ProduitModel
+    Model = ProduitModel
 
     name: null|string = null;
     description: null|string = null;

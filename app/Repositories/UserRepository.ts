@@ -3,6 +3,7 @@ import ExemplaireModel from "../Models/Exemplaire";
 import User from "../Entities/User";
 import RepositoryManager from "../Core/RepositoryManager";
 import Helpers from "../Core/Helpers";
+import ClubModel from "../Models/Club";
 
 export default class UserRepository extends RepositoryManager {
     static model = UserModel;
@@ -13,6 +14,6 @@ export default class UserRepository extends RepositoryManager {
     }
 
     static async findOne(id) {
-        return await super.findOne(id,ExemplaireModel);
+        return await super.findOne(id,[ExemplaireModel,ClubModel]);
     }
 }

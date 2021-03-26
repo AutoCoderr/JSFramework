@@ -11,6 +11,10 @@
         "methods": ["GET"]
       },
 
+      "clubs": {
+        "route": "/clubs"
+      },
+
       "coucou": {
         "route": "/coucou/:prenom"
       },

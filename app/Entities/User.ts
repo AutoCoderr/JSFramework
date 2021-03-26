@@ -2,10 +2,11 @@ import Helpers from "../Core/Helpers";
 import EntityManager from "../Core/EntityManager";
 import Exemplaire from "./Exemplaire";
 import UserModel from "../Models/User";
+import Club from "./Club";
 
 export default class User extends EntityManager {
 
-    ModelInstance = UserModel;
+    Model = UserModel;
 
     email: null|string = null;
     firstname: null|string = null;
@@ -14,6 +15,7 @@ export default class User extends EntityManager {
     password: null|string = null;
 
     Exemplaires: null|Array<Exemplaire> = null;
+    Clubs: null|Array<Club> = null;
 
     setEmail(email: string) {
         this.email = email;
@@ -68,7 +70,35 @@ export default class User extends EntityManager {
     }
 
     getExemplaires() {
+        if (this.Exemplaires instanceof Array) {
+            for (let i=0;i<this.Exemplaires.length;i++) {
+                if (!(this.Exemplaires[i] instanceof Exemplaire)) {
+                    this.Exemplaires[i] = (new Exemplaire()).hydrate(this.Exemplaires[i]);
+                }
+            }
+        }
         return this.Exemplaires;
+    }
+
+    getClubs() {
+        if (this.Clubs instanceof Array) {
+            for (let i=0;i<this.Clubs.length;i++) {
+                if (!(this.Clubs[i] instanceof Club)) {
+                    this.Clubs[i] = (new Club()).hydrate(this.Clubs[i]);
+                }
+            }
+        }
+        return this.Clubs;
+    }
+
+    async addClub(club: Club) {
+        if (club.ModelInstance != null && this.ModelInstance != null) { // @ts-ignore
+            await this.ModelInstance.addClub(club.ModelInstance);
+            if (this.Clubs == null) {
+                this.Clubs = [];
+            }
+            this.Clubs.push(club);
+        }
     }
 
 }

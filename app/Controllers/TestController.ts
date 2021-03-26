@@ -7,8 +7,30 @@ import Register from "../Forms/Register";
 import Validator from "../Core/Validator";
 import Login from "../Forms/Login";
 import UserRepository from "../Repositories/UserRepository";
+import Club from "../Entities/Club";
 
 export default class TestController extends Controller {
+
+    clubs = async () => {
+        const clubs: Array<any> = [
+            {name: "Tetris", entity: null},
+            {name: "Echec", entity: null},
+            {name: "Velo", entity: null},
+            {name: "Javascript", entity: null}
+        ];
+
+        let user = await this.getUser();
+
+        for (const club of clubs) {
+            club.entity = new Club();
+            club.entity.setName(club.name);
+
+            await club.entity.save();
+            await user.addClub(club.entity);
+        }
+
+        this.render("test/clubs.html.twig", {clubs: user.getClubs()});
+    }
 
     getExemplaires = async () => {
         let produits: Array<{name: string, entity: any}> = [
