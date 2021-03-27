@@ -87,6 +87,13 @@ export default class Controller {
                 }
             }
         }
-        this.res.render(file,{...params, session: this.req.session});
+        this.res.render(file,{...params, session: this.req.session, flash: this.res.locals});
+    }
+
+    setFlash(key: string, msgs: string|Array<string>) {
+        if (this.req.session.flash == undefined) {
+            this.req.session.flash = {};
+        }
+        this.req.session.flash[key] = msgs;
     }
 }

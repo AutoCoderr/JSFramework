@@ -22,16 +22,19 @@ export default class Validator {
 		}
 		const errors = await this.checkFields();
 		if (errors.length == 0) return true;
+		if(typeof(this.req.session.flash) == "undefined") {
+			this.req.session.flash = {};
+		}
 
-		if(typeof(this.req.session.errors) == "undefined") {
-			this.req.session.errors = {};
+		if(typeof(this.req.session.flash.errors) == "undefined") {
+			this.req.session.flash.errors = {};
 		}
 		if (typeof(this.req.session.fields) == "undefined") {
-			this.req.session.datas = {};
+			this.req.session.flash.datas = {};
 		}
 
-		this.req.session.errors[this.form.config.actionName] = errors;
-		this.req.session.datas[this.form.config.actionName] = {...this.datas};
+		this.req.session.flash.errors[this.form.config.actionName] = errors;
+		this.req.session.flash.datas[this.form.config.actionName] = {...this.datas};
 
 		return false;
 	}
@@ -83,14 +86,14 @@ export default class Validator {
 
 	checkPassword(field,password) {
 		return !((typeof(field.confirmWith) != "undefined" &&
-			password !== this.datas[field.confirmWith]) ||
+				password !== this.datas[field.confirmWith]) ||
 
 			(typeof(field.confirmWith) == "undefined" &&
 				(!this.thereIsAMinChar(password) ||
-				!this.thereIsAMajChar(password) ||
-				!this.thereIsANumber(password) ||
-				!this.thereIsASpecialChar(password) ||
-				password.length < 10)
+					!this.thereIsAMajChar(password) ||
+					!this.thereIsANumber(password) ||
+					!this.thereIsASpecialChar(password) ||
+					password.length < 10)
 			)
 		);
 
