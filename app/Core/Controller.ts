@@ -20,6 +20,10 @@ export default class Controller {
         if (params == null) params = {};
         let url = Helpers.getPath(routeName, params);
         if (url == "#nothing") url = "/";
+        this.redirect(url,permanently);
+    }
+
+    redirect(url, permanently = false) {
         this.res.redirect(permanently ? 301 : 302, url);
     }
 
