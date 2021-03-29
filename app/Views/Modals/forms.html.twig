@@ -9,31 +9,34 @@
 {% endif %}
 
 <form action="{{ form.config.action }}" method="{{ form.config.method }}">
-	{% for name in form.fields|keys %}
-		{% set field = form.fields[name] %}
-		{% if field.type != "hidden" %}
-			<label>{{ field.label }} :</label>
-		{% endif %}
-		<input
-				type="{{ field.type }}"
-				name="{{ name }}"
-				{% if datas is defined %}
-					value="{{ datas[name] }}"
-				{% elseif field.default is defined %}
-					{% if field.type == "checkbox" %}
-						{{ field.default ? "checked" : "" }}
-					{% else %}
-						value="{{ field.default }}"
+	<table class="form-table">
+		{% for name in form.fields|keys %}
+			{% set field = form.fields[name] %}
+			{% if field.type != "hidden" %}
+				<tr><td>
+				<label>{{ field.label }} :</label></td><td>
+			{% endif %}
+			<input
+					type="{{ field.type }}"
+					name="{{ name }}"
+					{% if datas is defined %}
+						value="{{ datas[name] }}"
+					{% elseif field.default is defined %}
+						{% if field.type == "checkbox" %}
+							{{ field.default ? "checked" : "" }}
+						{% else %}
+							value="{{ field.default }}"
+						{% endif %}
 					{% endif %}
-				{% endif %}
-				{% if field.minLength is defined %}minLength="{{ field.minLength }}"{% endif %}
-				{% if field.maxLength is defined %}maxLength="{{ field.maxLength }}"{% endif %}
-				{% if field.required is defined and field.required %} required='required'{% endif %}
-		/>
-		{% if field.type != "hidden" %}
-			<br/>
-		{% endif %}
-	{% endfor %}
+					{% if field.minLength is defined %}minLength="{{ field.minLength }}"{% endif %}
+					{% if field.maxLength is defined %}maxLength="{{ field.maxLength }}"{% endif %}
+					{% if field.required is defined and field.required %} required='required'{% endif %}
+			/>
+			{% if field.type != "hidden" %}
+				</td></tr>
+			{% endif %}
+		{% endfor %}
+	</table>
 	<input name="action" type="hidden" value="{{ form.config.actionName }}"/>
 	<input type="submit" value="{{ form.config.submit }}"/>
 </form>
