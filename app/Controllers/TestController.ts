@@ -8,6 +8,7 @@ import Validator from "../Core/Validator";
 import Login from "../Forms/Login";
 import UserRepository from "../Repositories/UserRepository";
 import Club from "../Entities/Club";
+import Helpers from "../Core/Helpers";
 
 export default class TestController extends Controller {
 
@@ -42,7 +43,7 @@ export default class TestController extends Controller {
         for (let produit of produits) {
             produit.entity = new Produit();
             produit.entity.setName(produit.name);
-            produit.entity.setUnits(rand(1,15));
+            produit.entity.setUnits(Helpers.rand(1,15));
             await produit.entity.save();
 
             console.log("produit => ");
@@ -54,7 +55,7 @@ export default class TestController extends Controller {
             let exemplaire = new Exemplaire();
             exemplaire.setProduit(produit.entity);
             exemplaire.setUser(user);
-            exemplaire.setUnits(rand(1,5));
+            exemplaire.setUnits(Helpers.rand(1,5));
 
             await exemplaire.save();
         }
@@ -135,8 +136,4 @@ export default class TestController extends Controller {
         this.req.session.user = await user.serialize();
         this.redirectToRoute("test_coucou", {prenom: "toto"});
     }
-}
-
-function rand(a,b) {
-    return a+Math.floor(Math.random()*(b-a+1));
 }
