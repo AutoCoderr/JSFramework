@@ -7,12 +7,14 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
-Twig.extendFunction('path', function (pathName, params = {}) {
-    return Helpers.getPath(pathName, params);
-});
+Twig.extendFunction('path', (pathName, params = {}) =>
+    Helpers.getPath(pathName, params)
+);
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
 app.use(session({
     secret: 'pVkEmEums7PD7kCuhkqF',
     resave: false,
