@@ -110,10 +110,7 @@ export default class TestController extends Controller {
 
                 const user: User = await UserRepository.findOneByEmailAndPassword(datas.email,datas.password);
                 if (user == null) {
-                    if(typeof(this.req.session.errors) == "undefined") {
-                        this.req.session.errors = {};
-                    }
-                    this.req.session.errors[formLogin.config.actionName] = [formLogin.config.msgError];
+                    validator.setFlashErrors([formLogin.config.msgError]);
                     this.redirectToRoute("test_login");
                 } else {
                     this.loginAndRedirect(user);
