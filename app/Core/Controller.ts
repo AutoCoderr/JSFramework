@@ -1,6 +1,7 @@
 import EntityManager from "./EntityManager";
 import Helpers from "./Helpers";
 import UserRepository from "../Repositories/UserRepository";
+import User from "../Entities/User";
 const fs = require("fs-extra");
 
 export default class Controller {
@@ -70,7 +71,7 @@ export default class Controller {
         return true;
     }
 
-    async getUser() {
+    async getUser(): Promise<null|User> {
         if (typeof(this.req.session.user) == "undefined") return null;
         return await UserRepository.findOne(this.req.session.user.id);
     }
@@ -95,5 +96,14 @@ export default class Controller {
             this.req.session.flash = {};
         }
         this.req.session.flash[key] = msgs;
+    }
+
+    generateToken() {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$%*!?/&#@";
+        let token = "";
+        for (let i=0;i<20;i++) {
+            token += chars[Helpers.rand(0,chars.length-1)];
+        }
+        this.req.session.token = token;
     }
 }
