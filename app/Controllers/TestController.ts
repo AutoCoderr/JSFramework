@@ -130,6 +130,7 @@ export default class TestController extends Controller {
     }
 
     async loginAndRedirect(user: User) {
+        this.generateToken();
         this.req.session.user = await user.serialize();
         this.redirectToRoute("test_coucou", {prenom: "toto"});
     }
