@@ -20,7 +20,7 @@ export default class TestController extends Controller {
             {name: "Javascript", entity: null}
         ];
 
-        let user = await this.getUser();
+        let user: User = await <Promise<User>>this.getUser();
 
         for (const club of clubs) {
             club.entity = new Club();
@@ -50,7 +50,7 @@ export default class TestController extends Controller {
             console.log(produit.entity);
         }
 
-        let user = await this.getUser();
+        let user: User = await <Promise<User>>this.getUser();
         for (let produit of produits) {
             let exemplaire = new Exemplaire();
             exemplaire.setProduit(produit.entity);
