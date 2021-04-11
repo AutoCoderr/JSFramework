@@ -1,11 +1,14 @@
-/package-lock.json
+package-lock.json
 /*.js
 /Repositories/*.js
 /Controllers/*.js
 /Models/*.js
 /Entities/*.js
 /Forms/*.js
+/Services/*.js
 /Fixtures/*.js
 /Core/*.js
-!/Core/env.js
+!/Core/env.example.js
+/Medias/*
+!/Medias/.gitkeep
 /node_modules
