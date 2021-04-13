@@ -6,6 +6,10 @@ export default class Produit extends EntityManager {
 
     Model = ProduitModel
 
+    entityTypes = {
+        Exemplaires: Exemplaire
+    };
+
     name: null|string = null;
     description: null|string = null;
     units: null|number = null;

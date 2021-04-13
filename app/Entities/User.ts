@@ -8,6 +8,11 @@ export default class User extends EntityManager {
 
     Model = UserModel;
 
+    entityTypes = {
+        Exemplaires: Exemplaire.name,
+        Clubs: Club.name
+    };
+
     email: null|string = null;
     firstname: null|string = null;
     lastname: null|string = null;
@@ -70,24 +75,10 @@ export default class User extends EntityManager {
     }
 
     getExemplaires() {
-        if (this.Exemplaires instanceof Array) {
-            for (let i=0;i<this.Exemplaires.length;i++) {
-                if (!(this.Exemplaires[i] instanceof Exemplaire)) {
-                    this.Exemplaires[i] = (new Exemplaire()).hydrate(this.Exemplaires[i]);
-                }
-            }
-        }
         return this.Exemplaires;
     }
 
     getClubs() {
-        if (this.Clubs instanceof Array) {
-            for (let i=0;i<this.Clubs.length;i++) {
-                if (!(this.Clubs[i] instanceof Club)) {
-                    this.Clubs[i] = (new Club()).hydrate(this.Clubs[i]);
-                }
-            }
-        }
         return this.Clubs;
     }
 

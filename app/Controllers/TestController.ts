@@ -51,6 +51,8 @@ export default class TestController extends Controller {
         }
 
         let user: User = await <Promise<User>>this.getUser();
+        console.log("user => ");
+        console.log(user);
         for (let produit of produits) {
             let exemplaire = new Exemplaire();
             exemplaire.setProduit(produit.entity);

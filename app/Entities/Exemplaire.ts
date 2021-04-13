@@ -26,9 +26,6 @@ export default class Exemplaire extends EntityManager {
 		this.UserId = user.getId();
 	}
 	getUser() {
-		if (!(this.User instanceof User) && this.User != null) {
-			this.User = (new User()).hydrate(this.User);
-		}
 		return this.User;
 	}
 
@@ -37,9 +34,6 @@ export default class Exemplaire extends EntityManager {
 		this.ProduitId = produit.getId();
 	}
 	getProduit() {
-		if (!(this.Produit instanceof Produit) && this.Produit != null) {
-			this.Produit = (new Produit()).hydrate(this.Produit);
-		}
 		return this.Produit;
 	}
 }

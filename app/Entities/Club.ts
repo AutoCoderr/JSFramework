@@ -5,6 +5,10 @@ import User from "./User";
 export default class Club extends EntityManager {
     Model = ClubModel;
 
+    entityTypes = {
+        Users: User.name
+    }
+
     name: null|string = null;
 
     Users: null|Array<User> = null;
@@ -17,13 +21,6 @@ export default class Club extends EntityManager {
     }
 
     getUsers() {
-        if (this.Users instanceof Array) {
-            for (let i=0;i<this.Users.length;i++) {
-                if (!(this.Users[i] instanceof User)) {
-                    this.Users[i] = (new User()).hydrate(this.Users[i]);
-                }
-            }
-        }
         return this.Users;
     }
 
