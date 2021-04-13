@@ -61,7 +61,7 @@ export default class EntityManager {
     hydrate(entry: any) {
         for (let attr in entry.dataValues) {
             if (typeof(this[attr]) != "undefined") {
-                if (typeof(entry.dataValues[attr]) == "object" && entry.dataValues[attr] != null) {
+                if (typeof(entry.dataValues[attr]) == "object" && entry.dataValues[attr] != null && !(entry.dataValues[attr] instanceof Date)) {
                     const entityName = this.entityTypes[attr] ? this.entityTypes[attr] : attr;
                     const entity = require("../Entities/"+entityName).default;
                     if (entry.dataValues[attr] instanceof Array) {
