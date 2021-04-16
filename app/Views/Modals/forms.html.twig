@@ -1,8 +1,8 @@
 <form
 		action="{{ form.config.action }}"
 		method="{{ form.config.method }}"
-		{% if form.config.confirmOnSumit is defined %}
-			onsubmit="return confirm(`{{ form.config.confirmOnSumit }}`)"
+		{% if form.config.confirmOnSubmit is defined %}
+			onsubmit="return confirm(`{{ form.config.confirmOnSubmit }}`)"
 		{% endif %}
 		{% if form.config.formClass is defined %}
 			class="{{ form.config.formClass }}"
@@ -16,8 +16,8 @@
 
 {% if flash.errors[form.config.actionName] is defined and flash.errors[form.config.actionName]|length > 0  %}
 	<ul>
-	{% for error in flash.errors[form.config.actionName] %}
-		<li style="color: red;">{{ error }}</li>
-	{% endfor %}
+		{% for error in flash.errors[form.config.actionName] %}
+			<li style="color: red;">{{ error }}</li>
+		{% endfor %}
 	</ul>
 {% endif %}
