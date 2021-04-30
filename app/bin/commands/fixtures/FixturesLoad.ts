@@ -4,6 +4,7 @@ import Command from "../../../Core/Command";
 
 export default class FixtureLoad extends Command {
     static commandName = "fixtures:load";
+    static description = "Executer les fixtures";
 
     static async action(_) {
         const path = __dirname+"/../../../Fixtures";
