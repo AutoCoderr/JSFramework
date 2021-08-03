@@ -15,6 +15,13 @@ const fileUpload = require('express-fileupload');
 Twig.extendFunction('path', (pathName, params = {}) =>
     Helpers.getPath(pathName, params)
 );
+Twig.extendFunction('csrf_token', (key,session) => {
+    if (session.tokens === undefined) {
+        session.tokens = {};
+    }
+    session.tokens[key] = Helpers.generateRandomString(20);
+    return "<input type='hidden' name='csrf_token' value='"+session.tokens[key]+"'>";
+});
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
