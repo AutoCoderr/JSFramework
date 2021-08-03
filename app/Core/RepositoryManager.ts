@@ -5,16 +5,19 @@ export default class RepositoryManager {
     static model: null|typeof Model = null;
     static entity: null|typeof EntityManager = null;
 
-    static async findOne(id, include: null|typeof Model|Array<typeof Model|{model: typeof Model, as: string}> = null) : Promise<any> {
+    static async findOne(id, include: null|typeof Model|Array<typeof Model|{model: typeof Model, as: string}> = null, order: null|Array<Array<typeof Model|{model: typeof Model, as: string}|string>> = null) : Promise<any> {
         let params: any = {where: {id: id}};
         if (include != null) {
             params.include = include;
         }
+        if (order != null) {
+            params.order = order;
+        }
         return await this.findOneByParams(params);
     }
 
-    static findAll() {
-        return this.findAllByParams({});
+    static findAll(include: null|typeof Model|Array<typeof Model|{model: typeof Model, as: string}> = null) {
+        return this.findAllByParams({...(include != null ? {include} : {})});
     }
 
     static async findAllByParams(params): Promise<any> {// @ts-ignore
