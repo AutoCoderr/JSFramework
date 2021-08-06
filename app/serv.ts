@@ -3,12 +3,14 @@ import Helpers from "./Core/Helpers";
 import env from "./Core/env";
 import http from "http";
 import https from "https";
-import fs from 'fs-extra';
+import fs from "fs-extra";
+import checkPermsMiddleware from "./Middlewares/checkPermsMiddleware";
+import getFlashFromSessionMiddleWare from "./Middlewares/getFlashFromSessionMiddleWare";
+import redirectToHttpsMiddleWare from "./Middlewares/redirectToHttpsMiddleWare";
 
 const Twig = require("twig");
 const {twig} = Twig;
 const express = require("express");
-const bodyParser = require('body-parser');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 
@@ -24,9 +26,8 @@ Twig.extendFunction('csrf_token', (key,session) => {
 });
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(bodyParser.raw());
+app.use(express.json());
+app.use(express.urlencoded());
 app.use(session({
     secret: 'pVkEmEums7PD7kCuhkqF',
     resave: false,
@@ -38,15 +39,9 @@ app.use(fileUpload({
 }));
 
 app.use(express.static('public'));
-app.use(function(req, res, next){
-    if (req.session.flash && Object.keys(req.session.flash).length > 0) {
-        for (let key in req.session.flash) {
-            res.locals[key] = req.session.flash[key];
-            delete req.session.flash[key];
-        }
-    }
-    next();
-});
+
+app.use(checkPermsMiddleware);
+app.use(getFlashFromSessionMiddleWare);
 
 app.set('views', 'Views');
 app.set('view engine', 'twig');
@@ -72,13 +67,7 @@ if (env.SSL_ENABLED) {
             cert: await fs.readFile(sslPath + env.SSL_CERTIFICATE, 'utf8')
         }
         if (env.SSL_REDIRECT_HTTP_TO_HTTPS) {
-            app.use(function (req, res, next) {
-                if (req.protocol == "http") {
-                    res.redirect(302, "https://" + req.headers.host + req.originalUrl);
-                } else {
-                    next();
-                }
-            });
+            app.use(redirectToHttpsMiddleWare);
         }
         const httpsServer = https.createServer(credentials, app);
         httpsServer.listen(443);
