@@ -1,6 +1,7 @@
 import env from './env';
 import crypto from 'crypto';
 import EntityManager from "./EntityManager";
+import fs from 'fs-extra';
 
 export default class Helpers {
     static controllers: any = null;
@@ -42,6 +43,10 @@ export default class Helpers {
     static ucFirst = str => str.charAt(0).toUpperCase()+str.slice(1);
 
     static getPath(pathName, params = {}) {
+        if (this.controllers == null) {
+            this.controllers = JSON.parse(fs.readFileSync(__dirname + "/../config/routes.json"));
+        }
+
         const controllers = this.controllers;
         const regexReplacer = new RegExp(":[a-zA-Z0-9_]+");
         const replacer = (match,index,content) => {
@@ -94,8 +99,24 @@ export default class Helpers {
         return num;
     }
 
-    static formatDate(date: Date) {
-        return date.getFullYear() + "-" + this.addMissingZero(date.getMonth() + 1) + "-" + this.addMissingZero(date.getDate())
+    static formatDate(date: Date, format = "fr") {
+        if (format == "fr") {
+            return this.addMissingZero(date.getDate())+"/"+this.addMissingZero(date.getMonth() + 1)+"/"+date.getFullYear();
+        } else if (format == "en") {
+            return date.getFullYear() + "-" + this.addMissingZero(date.getMonth() + 1) + "-" + this.addMissingZero(date.getDate())
+        }
+        return ""
+    }
+
+    static async getEntityFromForm(form): Promise<false|EntityManager|null> {
+        if (form.config.entity == undefined || !this.isNumber(form.config.id))
+            return form.config.entityInstance ?? null;
+        const repository = require("../Repositories/"+form.config.entity.name+"Repository").default;
+        const entity = await repository.findOne(parseInt(form.config.id));
+        if (entity == null) {
+            return false;
+        }
+        return entity;
     }
 
     static hydrateForm(entity: EntityManager, form) {
@@ -104,7 +125,7 @@ export default class Helpers {
                 let value = entity["get"+this.ucFirst(name)]();
                 if (!(value instanceof Array) && !(value instanceof EntityManager)) {
                     if (value instanceof Date) {
-                        value = this.formatDate(value);
+                        value = this.formatDate(value, "en");
                     }
                     form.fields[name].value = value;
                 }
@@ -115,6 +136,15 @@ export default class Helpers {
 
     static rand(a,b) {
         return a+Math.floor(Math.random()*(b-a+1));
+    }
+
+    static isNumber(num) {
+        return typeof(num) == "number" ||
+            (
+                typeof(num) == "string" && (
+                    parseInt(num).toString() == num && num != "NaN"
+                )
+            )
     }
 
     static generateRandomString(nb, forbiddenChars: Array<string> = []) {

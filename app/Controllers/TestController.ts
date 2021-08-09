@@ -82,16 +82,10 @@ export default class TestController extends Controller {
 
         if (validator.isSubmitted()) {
             if (await validator.isValid()) {
-                const datas = this.getDatas();
 
-                let user = new User();
-                user.setFirstname(datas.firstname);
-                user.setLastname(datas.lastname);
-                user.setEmail(datas.email);
-                user.addRole('USER');
-                user.setPassword(datas.password);
+                await validator.save();
 
-                await user.save();
+                const user = <User>validator.entity;
                 this.loginAndRedirect(user);
             } else {
                 this.redirectToRoute("test_register");
